@@ -16,6 +16,7 @@ const cmdSwitch = (input, ws) => {
 	params = params.map((x) => parseInt(x));
 	console.log(cmd, params); //mouse_up [ '10' ]
 	let mouseCoord = robot.getMousePos();
+
 	switch (cmd) {
 		case 'mouse_position':
 			console.log(mouseCoord); //{ x: 842, y: 353 }
@@ -41,15 +42,70 @@ const cmdSwitch = (input, ws) => {
 			mouseCoord = robot.getMousePos();
 			ws.send(`mouse_position ${mouseCoord.x},${mouseCoord.y}`);
 			break;
+		case 'draw_circle':
+			// const begin = robot.getMousePos();
+			const radius = params[0];
+			const begin = {
+				x: mouseCoord.x - radius,
+				y: mouseCoord.y,
+			};
+
+			robot.mouseToggle('down');
+			for (let i = 0; i <= Math.PI * 2; i += 0.02) {
+				const x = begin.x + radius * Math.cos(i);
+				const y = begin.y + radius * Math.sin(i);
+				robot.dragMouse(x, y);
+			}
+			robot.mouseToggle('up');
+			break;
+		case 'draw_square':
+			mouseCoord = robot.getMousePos();
+			robot.mouseToggle('down');
+			robot.moveMouseSmooth(mouseCoord.x, mouseCoord.y - params[0]); //up
+			mouseCoord = robot.getMousePos();
+			robot.moveMouseSmooth(mouseCoord.x + params[0], mouseCoord.y); //right
+			mouseCoord = robot.getMousePos();
+			robot.moveMouseSmooth(mouseCoord.x, mouseCoord.y + params[0]); //down
+			mouseCoord = robot.getMousePos();
+			robot.moveMouseSmooth(mouseCoord.x - params[0], mouseCoord.y); //left
+			robot.mouseToggle('up');
+			break;
+		case 'draw_rectangle':
+			mouseCoord = robot.getMousePos();
+			robot.mouseToggle('down');
+			robot.moveMouseSmooth(mouseCoord.x, mouseCoord.y - params[0]); //up
+			mouseCoord = robot.getMousePos();
+			robot.moveMouseSmooth(mouseCoord.x + params[1], mouseCoord.y); //right
+			mouseCoord = robot.getMousePos();
+			robot.moveMouseSmooth(mouseCoord.x, mouseCoord.y + params[0]); //down
+			mouseCoord = robot.getMousePos();
+			robot.moveMouseSmooth(mouseCoord.x - params[1], mouseCoord.y); //left
+			robot.mouseToggle('up');
+			break;
 	}
 };
 
 socket.on('connection', (ws) => {
-	console.log({ ws });
+	// console.log({ ws });
+	let inProgress = false;
+
 	ws.on('message', (rawData) => {
 		const data = rawData.toString();
 		console.log('received: ', data);
-		cmdSwitch(data, ws);
+
+		if (inProgress) {
+			console.log('wait');
+			return;
+		}
+		inProgress = true;
+
+		try {
+			cmdSwitch(data, ws);
+		} catch (e) {
+			console.log(e);
+		} finally {
+			inProgress = false;
+		}
 	});
 });
 
