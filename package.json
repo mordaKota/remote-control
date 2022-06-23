@@ -15,17 +15,19 @@
     "license": "ISC",
     "devDependencies": {
         "@types/node": "^18.0.0",
-        "ts-node": "^10.8.1",
-        "typescript": "^4.7.4",
-        "nodemon": "^2.0.16",
         "@typescript-eslint/eslint-plugin": "^5.29.0",
         "@typescript-eslint/parser": "^5.29.0",
         "eslint": "^8.18.0",
         "eslint-config-prettier": "^8.5.0",
         "eslint-plugin-prettier": "^4.0.0",
-        "prettier": "^2.7.1"
+        "nodemon": "^2.0.16",
+        "prettier": "^2.7.1",
+        "ts-node": "^10.8.1",
+        "typescript": "^4.7.4"
     },
     "dependencies": {
+        "@types/socket.io": "^3.0.2",
+        "@types/websocket": "^1.0.5",
         "jimp": "^0.16.1",
         "robotjs": "^0.6.0",
         "ws": "^8.8.0"
