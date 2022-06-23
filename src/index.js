@@ -12,9 +12,14 @@ const socket = new WebSocketServer({ port: 8080 });
 
 const getSnippet = (mouseCoord, ws) => {
 	const img = robot.screen.capture(mouseCoord.x, mouseCoord.y, 200, 200); //raw buffer with pixels;
+	let data = [];
+	const bitmap = img.image;
+	for (let i = 0; i < img.image.length; i += 4) {
+		data.push(img.image[i + 2], img.image[i + 1], img.image[i], img.image[i + 3]);
+	}
 	new Jimp(
 		{
-			data: img.image,
+			data: new Uint8Array(data),
 			width: img.width,
 			height: img.height,
 		},
