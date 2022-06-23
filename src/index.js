@@ -10,6 +10,29 @@ httpServer.listen(HTTP_PORT);
 
 const socket = new WebSocketServer({ port: 8080 });
 
+const getSnippet = (mouseCoord, ws) => {
+	const img = robot.screen.capture(mouseCoord.x, mouseCoord.y, 200, 200); //raw buffer with pixels;
+	new Jimp(
+		{
+			data: img.image,
+			width: img.width,
+			height: img.height,
+		},
+		async (err, image) => {
+			//image.write('./ttt.png');
+
+			if (err) {
+				console.log(err);
+			} else {
+				const base64Img = await image.getBase64Async(Jimp.MIME_PNG);
+				console.log(base64Img);
+				ws.send(`prnt_scrn ${base64Img.substring(22)}`);
+
+			}
+		},
+	);
+};
+
 const cmdSwitch = (input, ws) => {
 	let params = input.split(' ');
 	const cmd = params.shift();
@@ -82,11 +105,15 @@ const cmdSwitch = (input, ws) => {
 			robot.moveMouseSmooth(mouseCoord.x - params[1], mouseCoord.y); //left
 			robot.mouseToggle('up');
 			break;
+		case 'prnt_scrn':
+			mouseCoord = robot.getMousePos();
+			getSnippet(mouseCoord, ws);
+			break;
 	}
 };
 
 socket.on('connection', (ws) => {
-	// console.log({ ws });
+	console.log('CONNECTED');
 	let inProgress = false;
 
 	ws.on('message', (rawData) => {
