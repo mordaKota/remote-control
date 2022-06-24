@@ -1,13 +1,21 @@
 import robot from 'robotjs';
-import { moveMouseDown, moveMouseLeft, moveMouseRight, moveMouseUp, setMousePosition } from './mouse-control';
+import {
+	IMouseCoordinates,
+	moveMouseDown,
+	moveMouseLeft,
+	moveMouseRight,
+	moveMouseUp,
+	setMousePosition,
+} from './mouse-control';
 import { drawCircle, drawQuadri } from './drawing';
 import { getSnippet } from './screenshot';
+import { WebSocket } from 'ws';
 
-export const cmdSwitch = (input: any, ws: any) => {
-	let params = input.split(' ');
-	const cmd = params.shift();
-	params = params.map((x: string) => parseInt(x));
-	let mouseCoord = robot.getMousePos();
+export const cmdSwitch = (input: string, ws: WebSocket) => {
+	const paramsStr: string[] = input.split(' ');
+	const cmd: string | undefined = paramsStr.shift();
+	const params: number[] = paramsStr.map((x: string) => parseInt(x));
+	let mouseCoord: IMouseCoordinates = robot.getMousePos();
 
 	switch (cmd) {
 		case 'mouse_position':

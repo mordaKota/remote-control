@@ -1,5 +1,5 @@
 import { httpServer } from './http_server';
-import { WebSocketServer } from 'ws';
+import { WebSocket, WebSocketServer} from 'ws';
 import { cmdSwitch } from './cmds';
 
 const HTTP_PORT = 3000;
@@ -9,12 +9,12 @@ httpServer.listen(HTTP_PORT);
 
 const socket = new WebSocketServer({ port: 8080 });
 
-socket.on('connection', (ws: any) => {
+socket.on('connection', (ws: WebSocket) => {
 	console.log('CONNECTED');
 	let inProgress = false;
 
 	ws.on('message', (rawData: any) => {
-		const data = rawData.toString();
+		const data: string = rawData.toString();
 
 		if (inProgress) {
 			console.log('wait');
@@ -30,13 +30,21 @@ socket.on('connection', (ws: any) => {
 			inProgress = false;
 		}
 	});
-});
 
-socket.on('close', (event: any) => {
-	console.log(event.code);
+	ws.on('close', () => {
+		console.log('DISCONNECTED');
+	});
 });
 
 process.on('SIGINT', () => {
-	socket.close();
-	process.exit();
+	console.log('GRACEFULLY STOP');
+
+	socket.clients.forEach((ws) => {
+		ws.close();
+	});
+
+	setTimeout(() => {
+		process.exit();
+	}, 1000)
+
 });
