@@ -1,6 +1,6 @@
 import robot from 'robotjs';
 
-export const drawCircle = (ws, radius) => {
+export const drawCircle = (ws: any, radius: any) => {
 	const mouseCoord = robot.getMousePos();
 	console.log(`Received from front: cmd - draw_circle, params - ${radius}, coords - ${mouseCoord.x}, ${mouseCoord.y}`);
 	const startMouseCoords = {
@@ -17,7 +17,7 @@ export const drawCircle = (ws, radius) => {
 	ws.send(`draw_circle`);
 };
 
-export const drawQuadri = (ws, cmd, params) => {
+export const drawQuadri = (ws: any, cmd: string, params: number[]) => {
 	let mouseCoord = robot.getMousePos();
 	console.log(`Received from front: cmd - ${cmd}, params - ${params}, coords - ${mouseCoord.x}, ${mouseCoord.y}`);
 	if (params.length < 2) {

@@ -1,9 +1,9 @@
 import robot from 'robotjs';
 import Jimp from 'jimp';
 
-export const getSnippet = (mouseCoord, ws) => {
+export const getSnippet = (mouseCoord: any, ws: any) => {
 	const img = robot.screen.capture(mouseCoord.x, mouseCoord.y, 200, 200); //raw buffer with pixels;
-	let data = [];
+	const data = [];
 	for (let i = 0; i < img.image.length; i += 4) {
 		data.push(img.image[i + 2], img.image[i + 1], img.image[i], img.image[i + 3]);
 	}
@@ -13,7 +13,7 @@ export const getSnippet = (mouseCoord, ws) => {
 			width: img.width,
 			height: img.height,
 		},
-		async (err, image) => {
+		async (err: Error | null, image: Jimp) => {
 			if (err) {
 				console.log(err);
 			} else {

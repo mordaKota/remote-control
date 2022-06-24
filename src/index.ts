@@ -1,6 +1,6 @@
-import { httpServer } from './http_server/index.js';
+import { httpServer } from './http_server';
 import { WebSocketServer } from 'ws';
-import { cmdSwitch } from './cmds.js';
+import { cmdSwitch } from './cmds';
 
 const HTTP_PORT = 3000;
 
@@ -9,11 +9,11 @@ httpServer.listen(HTTP_PORT);
 
 const socket = new WebSocketServer({ port: 8080 });
 
-socket.on('connection', (ws) => {
+socket.on('connection', (ws: any) => {
 	console.log('CONNECTED');
 	let inProgress = false;
 
-	ws.on('message', (rawData) => {
+	ws.on('message', (rawData: any) => {
 		const data = rawData.toString();
 
 		if (inProgress) {
@@ -32,7 +32,7 @@ socket.on('connection', (ws) => {
 	});
 });
 
-socket.on('close', (event) => {
+socket.on('close', (event: any) => {
 	console.log(event.code);
 });
 

@@ -1,12 +1,12 @@
 import robot from 'robotjs';
-import { moveMouseDown, moveMouseLeft, moveMouseRight, moveMouseUp, setMousePosition } from './mouse-control.js';
-import { drawCircle, drawQuadri } from './drawing.js';
-import { getSnippet } from './screenshot.js';
+import { moveMouseDown, moveMouseLeft, moveMouseRight, moveMouseUp, setMousePosition } from './mouse-control';
+import { drawCircle, drawQuadri } from './drawing';
+import { getSnippet } from './screenshot';
 
-export const cmdSwitch = (input, ws) => {
+export const cmdSwitch = (input: any, ws: any) => {
 	let params = input.split(' ');
 	const cmd = params.shift();
-	params = params.map((x) => parseInt(x));
+	params = params.map((x: string) => parseInt(x));
 	let mouseCoord = robot.getMousePos();
 
 	switch (cmd) {
