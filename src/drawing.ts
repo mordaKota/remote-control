@@ -17,6 +17,7 @@ export const drawCircle = (ws: WebSocket, radius: number): void => {
 	}
 	robot.mouseToggle('up');
 	ws.send(`draw_circle`);
+	console.log(`Circle is done successfully`);
 };
 
 export const drawQuadri = (ws: WebSocket, cmd: string, params: number[]) => {
@@ -35,4 +36,5 @@ export const drawQuadri = (ws: WebSocket, cmd: string, params: number[]) => {
 	robot.moveMouseSmooth(mouseCoord.x - params[1], mouseCoord.y); //left
 	robot.mouseToggle('up');
 	params.length < 2 ? ws.send(`draw_square`) : ws.send(`draw_rectangle`);
+	console.log(`The quadrilateral is done successfully`);
 };

@@ -22,6 +22,7 @@ export const getSnippet = (mouseCoord: IMouseCoordinates, ws: WebSocket): void =
 			} else {
 				const base64Img: string = await image.getBase64Async(Jimp.MIME_PNG);
 				ws.send(`prnt_scrn ${base64Img.substring(22)}`);
+				console.log(`Screenshot is done successfully`);
 			}
 		},
 	);

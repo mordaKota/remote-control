@@ -6,7 +6,7 @@
 
     "scripts": {
         "build": "tsc",
-        "start": "node --experimental-specifier-resolution=node ./build/index.js",
+        "start": "npm run build && node --experimental-specifier-resolution=node ./build/index.js",
         "start:dev": "nodemon ./src/index.ts",
         "lint": "eslint ./src/**"
     },
